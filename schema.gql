@@ -2,79 +2,56 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: Int!
-  createdAt: String!
-  updatedAt: String!
-  name: String!
-  username: String!
-  email: String
-  picture: String
-  onlineStatus: OnlineStatus!
-  defaultStatus: OnlineStatus
-  twoFactor: Boolean
-  lastOnline: String!
-}
-
-enum OnlineStatus {
-  ONLINE
-  BUSY
-  IDLE
-  DO_NOT_DISTURB
-  INVISIBLE
-  OFFLINE
-}
-
 type Message {
   id: ID!
   message: String!
 }
 
-type PageInfo {
-  startCursor: String!
-  endCursor: String!
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
-
-type UserEntityPageEdge {
-  cursor: String!
-  node: User!
-}
-
-type PaginatedUsers {
-  previousCount: Int!
-  currentCount: Int!
-  edges: [UserEntityPageEdge!]!
-  pageInfo: PageInfo!
-}
-
-type UserEntityNotificationEdge {
-  cursor: String!
-  node: User!
-}
-
-type UserNotification {
-  type: NotificationType!
-  edge: UserEntityNotificationEdge!
+type Mutation {
+  deleteAccount(password: String!): Message!
+  updateOnlineStatus(defaultStatus: OnlineStatus!): User!
+  updateProfilePicture(picture: Upload!): User!
 }
 
 enum NotificationType {
+  DELETE
   NEW
   UPDATE
-  DELETE
+}
+
+enum OnlineStatus {
+  BUSY
+  DO_NOT_DISTURB
+  IDLE
+  INVISIBLE
+  OFFLINE
+  ONLINE
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+type PaginatedUsers {
+  currentCount: Int!
+  edges: [UserEntityPageEdge!]!
+  pageInfo: PageInfo!
+  previousCount: Int!
 }
 
 type Query {
   me: User!
-  userByUsername(username: String!): User!
   userById(userId: Int!): User!
-  filterUsers(cursor: QueryCursor = DATE, order: QueryOrder = DESC, after: String, first: Int = 10, search: String): PaginatedUsers!
+  userByUsername(username: String!): User!
+  users(after: String, cursor: QueryCursor = DATE, first: Int = 10, order: QueryOrder = DESC, search: String): PaginatedUsers!
 }
 
 enum QueryCursor {
-  DATE
   ALPHA
+  DATE
 }
 
 enum QueryOrder {
@@ -82,15 +59,38 @@ enum QueryOrder {
   DESC
 }
 
-type Mutation {
-  updateProfilePicture(picture: Upload!): User!
-  updateOnlineStatus(defaultStatus: OnlineStatus!): User!
-  deleteAccount(password: String!): Message!
+type Subscription {
+  userNotification(userId: Int): UserNotification!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
-type Subscription {
-  userNotification(userId: Int): UserNotification!
+type User {
+  createdAt: String!
+  defaultStatus: OnlineStatus
+  email: String
+  id: Int!
+  lastOnline: String!
+  name: String!
+  onlineStatus: OnlineStatus!
+  picture: String
+  twoFactor: Boolean
+  updatedAt: String!
+  username: String!
+}
+
+type UserEntityNotificationEdge {
+  cursor: String!
+  node: User!
+}
+
+type UserEntityPageEdge {
+  cursor: String!
+  node: User!
+}
+
+type UserNotification {
+  edge: UserEntityNotificationEdge!
+  type: NotificationType!
 }

@@ -1,10 +1,10 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { IGqlCtx } from '../../common/interfaces/gql-ctx.interface';
+import { ICtx } from '../../config/interfaces/ctx.interface';
 
 @Injectable()
-export class FastifyThrottlerGuard extends ThrottlerGuard {
+export class CustomThrottlerGuard extends ThrottlerGuard {
   getRequestResponse(context: ExecutionContext) {
     if (context.getType() === 'http') {
       const http = context.switchToHttp();
@@ -12,7 +12,7 @@ export class FastifyThrottlerGuard extends ThrottlerGuard {
       return { req: http.getRequest(), res: http.getResponse() };
     }
 
-    const gqlCtx: IGqlCtx = GqlExecutionContext.create(context).getContext();
-    return { req: gqlCtx.reply.request, res: gqlCtx.reply };
+    const ctx: ICtx = GqlExecutionContext.create(context).getContext();
+    return { req: ctx.req, res: ctx.res };
   }
 }

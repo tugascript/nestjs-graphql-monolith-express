@@ -17,6 +17,7 @@ import { QueryOrderEnum } from '../../common/enums/query-order.enum';
 import { config } from '../../config/config';
 import { MikroOrmConfig } from '../../config/mikroorm.config';
 import { validationSchema } from '../../config/validation';
+import { PubsubModule } from '../../pubsub/pubsub.module';
 import { UploaderModule } from '../../uploader/uploader.module';
 import { UserEntity } from '../entities/user.entity';
 import { UsersService } from '../users.service';
@@ -47,14 +48,9 @@ describe('UsersService', () => {
         MikroOrmModule.forFeature([UserEntity]),
         CommonModule,
         UploaderModule,
+        PubsubModule,
       ],
-      providers: [
-        UsersService,
-        {
-          provide: 'CommonModule',
-          useClass: CommonModule,
-        },
-      ],
+      providers: [UsersService, CommonModule, PubsubModule],
     }).compile();
 
     usersService = module.get<UsersService>(UsersService);

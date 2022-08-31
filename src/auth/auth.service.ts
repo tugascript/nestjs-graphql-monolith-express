@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
 import { Cache } from 'cache-manager';
 import dayjs from 'dayjs';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { Request, Response } from 'express';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
 import { CommonService } from '../common/common.service';
 import { LocalMessageType } from '../common/entities/gql/message.type';
@@ -101,7 +101,7 @@ export class AuthService {
    * Takes a confirmation token, confirms and updates the user
    */
   public async confirmEmail(
-    res: FastifyReply,
+    res: Response,
     { confirmationToken }: ConfirmEmailDto,
   ): Promise<IAuthResult> {
     const payload = (await this.verifyAuthToken(
@@ -130,7 +130,7 @@ export class AuthService {
    * asynchronously sends it by email. If false, it sends an auth type
    */
   public async loginUser(
-    res: FastifyReply,
+    res: Response,
     { email, password }: LoginDto,
   ): Promise<IAuthResult | LocalMessageType> {
     email = email.toLowerCase();
@@ -228,7 +228,7 @@ export class AuthService {
    * and logins the user
    */
   public async confirmLogin(
-    res: FastifyReply,
+    res: Response,
     { email, accessCode }: ConfirmLoginDto,
   ): Promise<IAuthResult> {
     email = email.toLowerCase();
@@ -255,7 +255,7 @@ export class AuthService {
    *
    * Removes the refresh token from the cookies
    */
-  public logoutUser(res: FastifyReply): LocalMessageType {
+  public logoutUser(res: Response): LocalMessageType {
     res.clearCookie(this.cookieName, { path: '/api/auth/refresh-access' });
     return new LocalMessageType('Logout Successfully');
   }
@@ -269,19 +269,15 @@ export class AuthService {
    * It generates both tokens so the user can stay logged in indefinitely
    */
   public async refreshAccessToken(
-    req: FastifyRequest,
-    res: FastifyReply,
+    req: Request,
+    res: Response,
   ): Promise<IAuthResult> {
-    const token = req.cookies[this.cookieName];
+    const token: string = req.signedCookies[this.cookieName];
 
     if (!token) throw new UnauthorizedException('Invalid refresh token');
 
-    const { valid, value } = res.unsignCookie(token);
-
-    if (!valid) throw new UnauthorizedException('Invalid refresh token');
-
     const payload = (await this.verifyAuthToken(
-      value,
+      token,
       'refresh',
     )) as ITokenPayloadResponse;
     const user = await this.usersService.getUncheckUserById(payload.id);
@@ -369,7 +365,7 @@ export class AuthService {
    * Change current user email
    */
   public async updateEmail(
-    res: FastifyReply,
+    res: Response,
     userId: number,
     { email, password }: ChangeEmailDto,
   ): Promise<IAuthResult> {
@@ -401,7 +397,7 @@ export class AuthService {
    * Change current user password
    */
   public async updatePassword(
-    res: FastifyReply,
+    res: Response,
     userId: number,
     { password, password1, password2 }: ChangePasswordDto,
   ): Promise<IAuthResult> {
@@ -615,12 +611,12 @@ export class AuthService {
    * Saves the refresh token as a http only cookie to
    * be used for refreshing the access token
    */
-  private saveRefreshCookie(res: FastifyReply, token: string): void {
+  private saveRefreshCookie(res: Response, token: string): void {
     res.cookie(this.cookieName, token, {
       secure: !this.testing,
       httpOnly: true,
       signed: true,
-      path: '/api/auth/refresh-access',
+      path: this.testing ? '/' : '/api/auth/refresh-access',
       expires: new Date(Date.now() + this.refreshTime * 1000),
     });
   }

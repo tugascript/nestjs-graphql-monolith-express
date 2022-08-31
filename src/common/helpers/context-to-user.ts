@@ -1,5 +1,5 @@
-import { IGqlCtx } from '../interfaces/gql-ctx.interface';
+import { ICtx } from '../../config/interfaces/ctx.interface';
 
-export const contextToUser = (ctx: IGqlCtx): number => {
-  return ctx.ws.userId ?? (ctx.reply.request as any).user;
+export const contextToUser = (ctx: ICtx): number => {
+  return ctx?.extra.user.userId ?? (ctx.req as any).user;
 };

@@ -1,4 +1,4 @@
-# NestJS GraphQL Monolith Fastify
+# NestJS GraphQL Monolith Express
 
 ## Description
 
@@ -15,8 +15,9 @@ a [NestJS GraphQL Code First Approach](https://docs.nestjs.com/graphql/quick-sta
 In terms of frameworks it uses:
 
 * [NestJS](https://nestjs.com/) as the main NodeJS framework;
-* [Fastify](https://www.fastify.io/) as the HTTP and WS adapter;
-* [Mercurius](https://mercurius.dev/#/) as the GraphQL adapter for Fastify;
+* [Express](http://expressjs.com/) as the HTTP and WS adapter;
+* [Apollo](https://www.apollographql.com/docs/apollo-server/integrations/middleware/#apollo-server-express) as the
+  GraphQL adapter for Express;
 * [MikroORM](https://mikro-orm.io/) as the ORM for interacting with the database;
 * [Sharp](https://sharp.pixelplumbing.com/) for image manipulation and optimization.
 
@@ -25,6 +26,7 @@ In terms of frameworks it uses:
 **Configuration** (adds most used config classes)**:**
 
 * Cache with [Redis](https://redis.io/);
+    - <small>NOTE: There's a caveat as you need to specify cache control directive for it to work</small>
 * GraphQL with subscriptions and [GraphQL through Websockets](https://www.npmjs.com/package/graphql-ws);
 * MikroORM with [SQLite](https://www.sqlite.org/index.html) in development and [PostgreSQL](https://www.postgresql.org/)
   in production.
@@ -43,6 +45,26 @@ In terms of frameworks it uses:
 
 * Has the generics for Edges and Paginated types;
 * [Relay cursor pagination](https://relay.dev/graphql/connections.htm) function.
+
+## GraphQL Upload Configuration
+
+This template uses the latest version of [GraphQL Upload](https://github.com/jaydenseric/graphql-upload). Unfortunately
+is uses [ECMAScript modules](https://nodejs.org/api/esm.html#modules-ecmascript-modules), and they're quite tricky to
+use with most TypeScript frameworks. So, in order to make it
+work I had to use these workarounds:
+
+- For the library itself I use [dynamic imports](https://v8.dev/features/dynamic-import) to load both the middleware and
+  the Scalar.
+- In Jest I had to use the `--experimental-vm-modules` flag to make it work, so all your projects with this template
+  will need to use [Yarn](https://yarnpkg.com/) package manager. Now the test command looks something like this:
+
+```bash
+$ yarn node --experimental-vm-modules $(yarn bin jest) 
+```
+
+- The UploadOptions interface now is local on the following file: `src/config/interfaces/upload-options.interface.ts`;
+- Since the GraphQLUpload scalar is now a dynamic import you'll need to use the uploadScalar util that is located on the
+  `src/uploader/utils/upload-scalar.util.ts` file on your Field decorators.
 
 ## Module Folder Structure
 

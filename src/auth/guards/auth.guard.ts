@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { IGqlCtx } from '../../common/interfaces/gql-ctx.interface';
+import { Request } from 'express';
+import { ICtx } from '../../config/interfaces/ctx.interface';
 import { AuthService } from '../auth.service';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { IExtendedRequest } from '../interfaces/extended-request.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,17 +26,17 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const gqlCtx: IGqlCtx = GqlExecutionContext.create(context).getContext();
+    const ctx: ICtx = GqlExecutionContext.create(context).getContext();
 
-    if (gqlCtx.ws) {
-      return await this.authService.refreshUserSession(gqlCtx.ws);
+    if (ctx.extra) {
+      return await this.authService.refreshUserSession(ctx.extra.user);
     }
 
-    return await this.setHttpHeader(gqlCtx.reply.request, isPublic);
+    return await this.setHttpHeader(ctx.req, isPublic);
   }
 
   private async setHttpHeader(
-    req: IExtendedRequest,
+    req: Request,
     isPublic: boolean,
   ): Promise<boolean> {
     const auth = req.headers?.authorization;
@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const { id } = await this.authService.verifyAuthToken(arr[1], 'access');
-      req.user = id;
+      (req as any).user = id;
       return true;
     } catch (_) {
       return isPublic;

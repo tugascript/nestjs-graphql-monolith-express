@@ -10,7 +10,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
 import { Cache } from 'cache-manager';
-import { PubSub } from 'mercurius';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+import { PubSub } from 'graphql-subscriptions';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
 import { RegisterDto } from '../auth/dtos/register.dto';
 import { ISessionsData } from '../auth/interfaces/sessions-data.interface';
@@ -23,6 +24,7 @@ import { NotificationTypeEnum } from '../common/enums/notification-type.enum';
 import { getUserQueryCursor } from '../common/enums/query-cursor.enum';
 import { RatioEnum } from '../common/enums/ratio.enum';
 import { IPaginated } from '../common/interfaces/paginated.interface';
+import { PUB_SUB } from '../pubsub/pubsub.module';
 import { UploaderService } from '../uploader/uploader.service';
 import { OnlineStatusDto } from './dtos/online-status.dto';
 import { ProfilePictureDto } from './dtos/profile-picture.dto';
@@ -43,6 +45,8 @@ export class UsersService {
     private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+    @Inject(PUB_SUB)
+    private readonly pubsub: PubSub | RedisPubSub,
   ) {}
 
   //____________________ MUTATIONS ____________________
@@ -93,7 +97,6 @@ export class UsersService {
    * the old one if it exits
    */
   public async updateProfilePicture(
-    pubsub: PubSub,
     userId: number,
     { picture }: ProfilePictureDto,
   ): Promise<UserEntity> {
@@ -109,7 +112,7 @@ export class UsersService {
     if (toDelete) await this.uploaderService.deleteFile(toDelete);
 
     await this.saveUserToDb(user);
-    this.publishUserNotification(pubsub, user, NotificationTypeEnum.UPDATE);
+    this.publishUserNotification(user, NotificationTypeEnum.UPDATE);
     return user;
   }
 
@@ -119,7 +122,6 @@ export class UsersService {
    * Updates the default online status of current user
    */
   public async updateDefaultStatus(
-    pubsub: PubSub,
     userId: number,
     { defaultStatus }: OnlineStatusDto,
   ): Promise<UserEntity> {
@@ -137,7 +139,7 @@ export class UsersService {
           ttl: this.wsAccessTime,
         }),
       );
-      this.publishUserNotification(pubsub, user, NotificationTypeEnum.UPDATE);
+      this.publishUserNotification(user, NotificationTypeEnum.UPDATE);
     }
 
     await this.saveUserToDb(user);
@@ -291,19 +293,15 @@ export class UsersService {
   }
 
   private publishUserNotification(
-    pubsub: PubSub,
     user: UserEntity,
     notificationType: NotificationTypeEnum,
   ) {
-    pubsub.publish<IUserNotification>({
-      topic: 'USER_NOTIFICATION',
-      payload: {
-        userNotification: this.commonService.generateNotification(
-          user,
-          notificationType,
-          'username',
-        ),
-      },
+    this.pubsub.publish<IUserNotification>('USER_NOTIFICATION', {
+      userNotification: this.commonService.generateNotification(
+        user,
+        notificationType,
+        'username',
+      ),
     });
   }
 }

@@ -1,6 +1,6 @@
+import { Inject } from '@nestjs/common';
 import {
   Args,
-  Context,
   Mutation,
   Parent,
   Query,
@@ -8,12 +8,14 @@ import {
   Resolver,
   Subscription,
 } from '@nestjs/graphql';
-import { PubSub } from 'mercurius';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+import { PubSub } from 'graphql-subscriptions';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
 import { SearchDto } from '../common/dtos/search.dto';
 import { LocalMessageType } from '../common/entities/gql/message.type';
 import { IPaginated } from '../common/interfaces/paginated.interface';
+import { PUB_SUB } from '../pubsub/pubsub.module';
 import { GetUserDto } from './dtos/get-user.dto';
 import { OnlineStatusDto } from './dtos/online-status.dto';
 import { ProfilePictureDto } from './dtos/profile-picture.dto';
@@ -28,26 +30,27 @@ import { UsersService } from './users.service';
 
 @Resolver(() => UserEntity)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @Inject(PUB_SUB) private readonly pubsub: PubSub | RedisPubSub,
+  ) {}
 
   //____________________ MUTATIONS ____________________
 
   @Mutation(() => UserEntity)
   public async updateProfilePicture(
-    @Context('pubsub') pubsub: PubSub,
     @CurrentUser() userId: number,
     @Args() dto: ProfilePictureDto,
   ): Promise<UserEntity> {
-    return this.usersService.updateProfilePicture(pubsub, userId, dto);
+    return this.usersService.updateProfilePicture(userId, dto);
   }
 
   @Mutation(() => UserEntity)
   public async updateOnlineStatus(
-    @Context('pubsub') pubsub: PubSub,
     @CurrentUser() userId: number,
     @Args() dto: OnlineStatusDto,
   ): Promise<UserEntity> {
-    return this.usersService.updateDefaultStatus(pubsub, userId, dto);
+    return this.usersService.updateDefaultStatus(userId, dto);
   }
 
   @Mutation(() => LocalMessageType)
@@ -96,11 +99,8 @@ export class UsersResolver {
       );
     },
   })
-  public async userNotification(
-    @Context('pubsub') pubsub: PubSub,
-    @Args() dto: UserNotificationDto,
-  ) {
-    return pubsub.subscribe<IUserNotification>('USER_NOTIFICATION');
+  public async userNotification(@Args() dto: UserNotificationDto) {
+    return this.pubsub.asyncIterator<IUserNotification>('USER_NOTIFICATION');
   }
 
   //____________________ RESOLVE FIELDS ____________________

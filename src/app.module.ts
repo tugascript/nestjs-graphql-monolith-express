@@ -1,4 +1,5 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { ApolloDriver } from '@nestjs/apollo';
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -11,12 +12,12 @@ import { CacheConfig } from './config/cache.config';
 import { config } from './config/config';
 import { GqlConfigService } from './config/graphql.config';
 import { MikroOrmConfig } from './config/mikroorm.config';
-import { GraphQLDriver } from './config/utils/graphql.driver';
 import { validationSchema } from './config/validation';
 import { EmailModule } from './email/email.module';
+import { LoadersModule } from './loaders/loaders.module';
+import { PubsubModule } from './pubsub/pubsub.module';
 import { UploaderModule } from './uploader/uploader.module';
 import { UsersModule } from './users/users.module';
-import { LoadersModule } from './loaders/loaders.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { LoadersModule } from './loaders/loaders.module';
     }),
     GraphQLModule.forRootAsync({
       imports: [ConfigModule, AuthModule, LoadersModule],
-      driver: GraphQLDriver,
+      driver: ApolloDriver,
       useClass: GqlConfigService,
     }),
     UsersModule,
@@ -44,6 +45,7 @@ import { LoadersModule } from './loaders/loaders.module';
     EmailModule,
     UploaderModule,
     LoadersModule,
+    PubsubModule,
   ],
   providers: [
     {

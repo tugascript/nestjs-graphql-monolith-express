@@ -15,6 +15,7 @@ import { IJwt, ISingleJwt } from '../../config/interfaces/jwt.interface';
 import { MikroOrmConfig } from '../../config/mikroorm.config';
 import { validationSchema } from '../../config/validation';
 import { EmailModule } from '../../email/email.module';
+import { PubsubModule } from '../../pubsub/pubsub.module';
 import { UsersModule } from '../../users/users.module';
 import { UsersService } from '../../users/users.service';
 import { AuthService } from '../auth.service';
@@ -71,14 +72,9 @@ describe('AuthService', () => {
           useClass: MikroOrmConfig,
         }),
         CommonModule,
+        PubsubModule,
       ],
-      providers: [
-        AuthService,
-        {
-          provide: 'CommonModule',
-          useClass: CommonModule,
-        },
-      ],
+      providers: [AuthService, CommonModule, PubsubModule],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
@@ -267,7 +263,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('Password Reseting', () => {
+  describe('Password Resetting', () => {
     let resetToken: string;
     it('sendResetPasswordEmail && resetPassword', async () => {
       let user = await usersService.getUncheckUser(NEW_EMAIL);

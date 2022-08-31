@@ -1,8 +1,7 @@
 import { IsMimeType, IsString } from 'class-validator';
-import { ReadStream } from 'fs-capacitor';
-import { FileUpload } from 'graphql-upload';
+import { ReadStream } from 'fs';
 
-export abstract class FileUploadDto implements FileUpload {
+export abstract class FileUploadDto {
   @IsString()
   public filename!: string;
 
