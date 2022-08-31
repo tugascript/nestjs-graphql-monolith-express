@@ -53,12 +53,14 @@ is uses [ECMAScript modules](https://nodejs.org/api/esm.html#modules-ecmascript-
 use with most TypeScript frameworks. So, in order to make it
 work I had to use these workarounds:
 
+- This template now only works with [Node](https://nodejs.org/en/) version 16 or higher;
 - For the library itself I use [dynamic imports](https://v8.dev/features/dynamic-import) to load both the middleware and
   the Scalar.
 - In Jest I had to use the `--experimental-vm-modules` flag to make it work, so all your projects with this template
   will need to use [Yarn](https://yarnpkg.com/) package manager. Now the test command looks something like this:
 
 ```bash
+# I have changed it on the package.json file as well
 $ yarn node --experimental-vm-modules $(yarn bin jest) 
 ```
 
