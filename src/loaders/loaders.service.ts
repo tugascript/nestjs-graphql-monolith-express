@@ -6,6 +6,7 @@ import { IBase } from '../common/interfaces/base.interface';
 import { ICreation } from '../common/interfaces/creation.interface';
 import { IPaginated } from '../common/interfaces/paginated.interface';
 import { ICountResult } from './interfaces/count-result.interface';
+import { IExistenceResult } from './interfaces/existence-result.interface';
 import { ILoader } from './interfaces/loader.interface';
 import { ILoaders } from './interfaces/loaders.interface';
 
