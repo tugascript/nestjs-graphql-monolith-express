@@ -21,7 +21,7 @@ async function bootstrap() {
   const { default: graphqlUploadExpress } = await import(
     'graphql-upload/graphqlUploadExpress.mjs'
   );
-  graphqlUploadExpress(configService.get<IUploadOptions>('upload'));
+  app.use(graphqlUploadExpress(configService.get<IUploadOptions>('upload')));
 
   if (configService.get<boolean>('testing')) {
     app.use(
