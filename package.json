@@ -74,7 +74,7 @@
     "@nestjs/testing": "^9.2.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cache-manager": "^4.0.2",
-    "@types/jest": "29.2.2",
+    "@types/jest": "29.2.6",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.11.9",
     "@types/nodemailer": "^6.4.6",
