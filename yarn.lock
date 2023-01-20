@@ -181,14 +181,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/utils.keyvadapter@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "@apollo/utils.keyvadapter@npm:1.1.2"
+"@apollo/utils.keyvadapter@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@apollo/utils.keyvadapter@npm:2.0.0"
   dependencies:
-    "@apollo/utils.keyvaluecache": ^1.0.1
+    "@apollo/utils.keyvaluecache": ^2.0.0
     dataloader: ^2.1.0
     keyv: ^4.4.0
-  checksum: 1d4899f07a55b6a0586524877bcc45a914386223e6cc0a2caede2b68b11af08bb4e236f659bb7b3073cde8df242eff3d754c846c5cee47b1ac5cb920fd7735f8
+  checksum: 7d0f29f2b6324d80619d8ba756014ffbdf72ee842f8b33e72503289858e78efdf1b0fd3ea6c32f61e4fc43f2f28dbd9d94dca96865e1e030a38fb4a0bc5322af
   languageName: node
   linkType: hard
 
@@ -202,10 +202,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/utils.keyvaluecache@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "@apollo/utils.keyvaluecache@npm:2.1.0"
+  dependencies:
+    "@apollo/utils.logger": ^2.0.0
+    lru-cache: ^7.14.1
+  checksum: 1e1c9cdea98384c01864250bd8e39cffaa822adbd60f9387ecf5c6565f69c2fd23b3ebdc499990b39535d4df0e3991fe73ec2d59a2798631ede04d8834d8c384
+  languageName: node
+  linkType: hard
+
 "@apollo/utils.logger@npm:^1.0.0":
   version: 1.0.0
   resolution: "@apollo/utils.logger@npm:1.0.0"
   checksum: 9be2b269d6d1cf2235c7b49a5edbb36c87589facf79516521df66d0c782709b7301a1365693b6e15d77f482d231bbb0fea4c2ae42faac7068cc4e014ce338c68
+  languageName: node
+  linkType: hard
+
+"@apollo/utils.logger@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@apollo/utils.logger@npm:2.0.0"
+  checksum: bfe87036382adaf1b5f05acc8e926b6316a8b37dc0c0b20ae0c2010b61085d018620203eda9cb6884e650f3d971a4dfdbc30980deedba99d219ba2abd9bd8ffa
   languageName: node
   linkType: hard
 
@@ -8451,7 +8468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^7.14.0":
+"lru-cache@npm:^7.14.0, lru-cache@npm:^7.14.1":
   version: 7.14.1
   resolution: "lru-cache@npm:7.14.1"
   checksum: d72c6713c6a6d86836a7a6523b3f1ac6764768cca47ec99341c3e76db06aacd4764620e5e2cda719a36848785a52a70e531822dc2b33fb071fa709683746c104
@@ -8963,7 +8980,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "nestjs-graphql-fastify-template@workspace:."
   dependencies:
-    "@apollo/utils.keyvadapter": ^1.1.2
+    "@apollo/utils.keyvadapter": ^2.0.0
     "@aws-sdk/client-s3": ^3.204.0
     "@aws-sdk/signature-v4-crt": ^3.201.0
     "@faker-js/faker": ^7.6.0
