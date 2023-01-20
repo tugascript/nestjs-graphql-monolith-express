@@ -3395,13 +3395,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:29.2.2":
-  version: 29.2.2
-  resolution: "@types/jest@npm:29.2.2"
+"@types/jest@npm:29.2.6":
+  version: 29.2.6
+  resolution: "@types/jest@npm:29.2.6"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 13b1a48858c8c451109c2838205fdcee6f41d672674d2f0e3cada35e94f133370aba4f4b5c3f5b174f3e16244d76d7d718afa7cc67d4d6f90d1b87951f4c87c3
+  checksum: 90190ac830334af1470d255853f9621fe657e5030b4d96773fc1f884833cd303c76580b00c1b86dc38a8db94f1c7141d462190437a10af31852b8845a57c48ba
   languageName: node
   linkType: hard
 
@@ -8985,7 +8985,7 @@ __metadata:
     "@nestjs/throttler": ^3.1.0
     "@types/bcrypt": ^5.0.0
     "@types/cache-manager": ^4.0.2
-    "@types/jest": 29.2.2
+    "@types/jest": 29.2.6
     "@types/jsonwebtoken": ^8.5.9
     "@types/node": ^18.11.9
     "@types/nodemailer": ^6.4.6
