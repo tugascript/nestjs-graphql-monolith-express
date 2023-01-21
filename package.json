@@ -34,7 +34,7 @@
     "@nestjs/core": "^9.2.0",
     "@nestjs/graphql": "^10.1.5",
     "@nestjs/platform-express": "^9.2.0",
-    "@nestjs/throttler": "^3.1.0",
+    "@nestjs/throttler": "^4.0.0",
     "altair-express-middleware": "^5.0.4",
     "apollo-server-express": "^3.11.1",
     "apollo-server-plugin-response-cache": "^3.8.1",
