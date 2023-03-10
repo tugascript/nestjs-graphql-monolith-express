@@ -32,7 +32,7 @@
     "@nestjs/common": "^9.2.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.0",
-    "@nestjs/graphql": "^10.1.5",
+    "@nestjs/graphql": "^11.0.0",
     "@nestjs/platform-express": "^9.2.0",
     "@nestjs/throttler": "^4.0.0",
     "altair-express-middleware": "^5.0.4",
