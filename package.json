@@ -28,7 +28,7 @@
     "@mikro-orm/core": "^5.5.2",
     "@mikro-orm/nestjs": "^5.1.2",
     "@mikro-orm/postgresql": "^5.5.2",
-    "@nestjs/apollo": "^10.1.4",
+    "@nestjs/apollo": "^11.0.0",
     "@nestjs/common": "^9.2.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.0",
