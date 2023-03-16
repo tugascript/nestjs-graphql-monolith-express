@@ -4038,19 +4038,19 @@ __metadata:
   linkType: hard
 
 "altair-express-middleware@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "altair-express-middleware@npm:5.0.4"
+  version: 5.0.18
+  resolution: "altair-express-middleware@npm:5.0.18"
   dependencies:
-    altair-static: ^5.0.4
+    altair-static: ^5.0.18
     express: ^4.16.2
-  checksum: a2d84e585bc4d2b52e8aca1751beb80bd13f89fd21035416ed03c034b1e64070f6297e44b0f0457cc6649c3b2c3c00fcf2e5065555430502f00e49cbc2068ac8
+  checksum: f5d93fc991a8f00266f0e53410a5bf4b7dc7c634b905de8b0fbf155ab58361d0e6ed80b32bb2f9d4ab5fdb2f6990ed5b3234a90584a907c22c1c63ac54eb804d
   languageName: node
   linkType: hard
 
-"altair-static@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "altair-static@npm:5.0.4"
-  checksum: 94863f6c5f8c325fd32dbe82f052363fb73f60452e9aa1f452a9743ab1ac875bcea4608976dc465179edb8760b4b4120c6fcac0484f924af45ffe0083a2db3ab
+"altair-static@npm:^5.0.18":
+  version: 5.0.18
+  resolution: "altair-static@npm:5.0.18"
+  checksum: f6f8007f2ffa160620421572f82bff6e68298b2b6c724bf1b6482bfb2dbea999469d1f48498f67437f3be444f6d83223111a07d06ace7c31cb2ec4de06cef193
   languageName: node
   linkType: hard
 
